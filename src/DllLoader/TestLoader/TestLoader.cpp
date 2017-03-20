@@ -14,11 +14,13 @@ public:
         : Library("SimpleExampleLibrary.dll")
         , GetOne(Module(), "fnGetOne")
         , CAdder(Module(), "fnAdder")
+        , DecoratedAdder(Module(), "?fnCppAdder@@YAHHH@Z")
     {
     }
 
     Loader::CFunction0<int> GetOne;
     Loader::CFunction<int, int, int> CAdder;
+    Loader::CFunction<int, int, int> DecoratedAdder;
 };
 
 int main(int argc, char *argv[])
@@ -38,6 +40,7 @@ int main(int argc, char *argv[])
     SimpleExampleLibrary library;
     cout << "Value from dll: " << library.GetOne() << endl;
     cout << "Add from dll  : " << library.CAdder(3, 6) << endl;
+    cout << "Decorated Adder from dll  : " << library.DecoratedAdder(5, 8) << endl;
 
     return 0;
 }
