@@ -21,8 +21,7 @@ class InvalidFunctionException
 template<typename functionReturnType>
     struct CFunction0
 {
-public:
-    using Function_t = functionReturnType (*)(void);
+        using Function_t = functionReturnType (*)(void);
 
     CFunction0(const HMODULE& module, const std::string & function)
         : _module(module)
@@ -54,6 +53,42 @@ private:
     const std::string _functionName;
     const Function_t _function;
 };
+
+template<typename functionReturnType, typename... Arguments>
+    struct CFunction
+    {
+        using Function_t = functionReturnType(*)(Arguments...);
+
+        CFunction(const HMODULE& module, const std::string & function)
+            : _module(module)
+            , _functionName(function)
+            , _function(GetFunction(_module, _functionName))
+        {
+            assert(nullptr != _module);
+            if (nullptr == _function)
+            {
+                throw InvalidFunctionException();
+            }
+        }
+
+        functionReturnType operator()(Arguments... params)
+        {
+            auto result = _function(params...);
+            return result;
+        }
+
+    private:
+        static Function_t GetFunction(const HMODULE& module, const std::string & function)
+        {
+            auto fn = Function_t(GetProcAddress(module, function.c_str()));
+            return fn;
+        }
+
+    private:
+        const HMODULE _module;
+        const std::string _functionName;
+        const Function_t _function;
+    };
 
 class Library
 {
