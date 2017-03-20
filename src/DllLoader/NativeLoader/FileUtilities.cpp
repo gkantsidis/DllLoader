@@ -50,8 +50,7 @@ static FileUtilities::Path GetPathInternal(const LPCWCHAR filename)
 
     if (retval == 0)
     {
-        // TODO: flag the error
-        return empty;
+        throw InvalidFileException(filename);
     }
     else
     {
@@ -60,10 +59,41 @@ static FileUtilities::Path GetPathInternal(const LPCWCHAR filename)
     }
 }
 
+static PTCHAR GetPathInternalAsTChar(const LPCWCHAR filename)
+{
+    FileUtilities::Path empty = "";
+
+    DWORD retval = 0;
+    TCHAR buffer[MAX_PATH_AND_FILENAME] = TEXT("");
+    TCHAR** lppPart = { nullptr };
+
+    retval = GetFullPathName(
+        filename,
+        MAX_PATH_AND_FILENAME,
+        buffer,
+        lppPart
+    );
+
+    if (retval == 0)
+    {
+        throw InvalidFileException(filename);
+    }
+    else
+    {
+        return buffer;
+    }
+}
+
 FileUtilities::Path FileUtilities::GetFullName(const std::string& filename)
 {
     FileUtilities::Path fn = filename;
     return GetPathInternal(fn.wstring().c_str());
+}
+
+PTCHAR FileUtilities::GetFullNameAsTChar(const std::string & filename)
+{
+    FileUtilities::Path fn = filename;
+    return GetPathInternalAsTChar(fn.wstring().c_str());
 }
 
 FileUtilities::Path FileUtilities::GetParentDirectory(const string& filename)

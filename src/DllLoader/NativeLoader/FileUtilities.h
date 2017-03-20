@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Assembly         : 
+// Assembly         :
 // Author           : Christos Gkantsidis
 // Created          : 03-18-2017
 //
@@ -15,12 +15,31 @@
 
 #include <filesystem>
 #include <string>
+#include "LoaderException.h"
 
 /// <summary>
 /// The Loader namespace.
 /// </summary>
 namespace Loader
 {
+
+class InvalidFileException
+    : LoaderException
+{
+public:
+    InvalidFileException(const std::string& filename)
+        : LoaderException()
+        , _filename{ filename }
+    {}
+
+    InvalidFileException(const LPCWCHAR filename)
+        : LoaderException()
+        , _filename{ filename }
+    {}
+
+private:
+    const std::string& _filename;
+};
 
 /// <summary>
 /// Utility methods for dealing with the filesystem.
@@ -32,6 +51,7 @@ public:
 
     static bool IsValidFile(const std::string& filename);
     static Path GetFullName(const std::string& filename);
+    static PTCHAR GetFullNameAsTChar(const std::string& filename);
     static Path GetParentDirectory(const std::string& filename);
     static Path GetDirectory(const std::string& filename);
 

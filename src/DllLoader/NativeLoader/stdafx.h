@@ -13,6 +13,7 @@
 
 // TODO: reference additional headers your program requires here
 #include <windows.h>
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <tchar.h>
