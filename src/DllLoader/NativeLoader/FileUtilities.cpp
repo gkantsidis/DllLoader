@@ -59,18 +59,19 @@ static FileUtilities::Path GetPathInternal(const LPCWCHAR filename)
     }
 }
 
-static PTCHAR GetPathInternalAsTChar(const LPCWCHAR filename)
+static std::unique_ptr<TCHAR> GetPathInternalAsTChar(const LPCWCHAR filename)
 {
     FileUtilities::Path empty = "";
 
     DWORD retval = 0;
-    TCHAR buffer[MAX_PATH_AND_FILENAME] = TEXT("");
+    auto buffer = make_unique<TCHAR>(MAX_PATH_AND_FILENAME);
+    memset(buffer.get(), 0x00, MAX_PATH_AND_FILENAME * sizeof(TCHAR));
     TCHAR** lppPart = { nullptr };
 
     retval = GetFullPathName(
         filename,
         MAX_PATH_AND_FILENAME,
-        buffer,
+        buffer.get(),
         lppPart
     );
 
@@ -90,7 +91,7 @@ FileUtilities::Path FileUtilities::GetFullName(const std::string& filename)
     return GetPathInternal(fn.wstring().c_str());
 }
 
-PTCHAR FileUtilities::GetFullNameAsTChar(const std::string & filename)
+std::unique_ptr<WCHAR> FileUtilities::GetFullNameAsTChar(const std::string & filename)
 {
     FileUtilities::Path fn = filename;
     return GetPathInternalAsTChar(fn.wstring().c_str());

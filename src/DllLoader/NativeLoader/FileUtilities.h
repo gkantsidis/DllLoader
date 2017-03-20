@@ -13,6 +13,7 @@
 // ***********************************************************************
 #pragma once
 
+#include <Windows.h>
 #include <filesystem>
 #include <string>
 #include "LoaderException.h"
@@ -34,11 +35,21 @@ public:
 
     InvalidFileException(const LPCWCHAR filename)
         : LoaderException()
-        , _filename{ filename }
-    {}
+        , _filename(ConvertFromWString(filename))
+    {
+    }
 
 private:
-    const std::string& _filename;
+
+    static std::string ConvertFromWString(const LPCWCHAR input)
+    {
+        using convert_type = std::codecvt_utf8<wchar_t>;
+        std::wstring_convert<convert_type, wchar_t> converter;
+        return converter.to_bytes(input);
+    }
+
+private:
+    const std::string _filename;
 };
 
 /// <summary>
@@ -51,7 +62,7 @@ public:
 
     static bool IsValidFile(const std::string& filename);
     static Path GetFullName(const std::string& filename);
-    static PTCHAR GetFullNameAsTChar(const std::string& filename);
+    static std::unique_ptr<TCHAR> GetFullNameAsTChar(const std::string& filename);
     static Path GetParentDirectory(const std::string& filename);
     static Path GetDirectory(const std::string& filename);
 

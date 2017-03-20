@@ -15,7 +15,7 @@ public:
     {
     }
 
-    LoaderException(const char const * &message)
+    LoaderException(const char * const &message)
         : std::exception(message)
     {
     }

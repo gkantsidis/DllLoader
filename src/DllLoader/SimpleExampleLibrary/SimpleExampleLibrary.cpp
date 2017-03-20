@@ -8,6 +8,11 @@
 // This is an example of an exported variable
 SIMPLEEXAMPLELIBRARY_API int nSimpleExampleLibrary=0;
 
+SIMPLEEXAMPLELIBRARY_API int fnGetOne()
+{
+    return 1;
+}
+
 // This is an example of an exported function.
 SIMPLEEXAMPLELIBRARY_API int fnCppAdder(int left, int right)
 {

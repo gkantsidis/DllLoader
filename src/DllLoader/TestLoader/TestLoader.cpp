@@ -2,8 +2,23 @@
 //
 
 #include "stdafx.h"
+#include "Library.h"
 
 using namespace std;
+
+class SimpleExampleLibrary
+    : Loader::Library
+{
+public:
+    SimpleExampleLibrary()
+        : Library("SimpleExampleLibrary.dll")
+        , GetOne(Module(), "fnGetOne")
+    {
+    }
+
+    Loader::CFunction0<int> GetOne;
+    
+};
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +33,9 @@ int main(int argc, char *argv[])
     cout << "Full name: " << Loader::FileUtilities::GetFullName(filename) << endl;
     cout << "Directory: " << Loader::FileUtilities::GetDirectory(filename) << endl;
     cout << "Parent   : " << Loader::FileUtilities::GetParentDirectory(filename) << endl;
+
+    SimpleExampleLibrary library;
+    cout << "Value from dll: " << library.GetOne() << endl;
 
     return 0;
 }

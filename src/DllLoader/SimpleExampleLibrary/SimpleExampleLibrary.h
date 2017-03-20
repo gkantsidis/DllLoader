@@ -22,6 +22,7 @@ extern SIMPLEEXAMPLELIBRARY_API int nSimpleExampleLibrary;
 SIMPLEEXAMPLELIBRARY_API int fnCppAdder(int left, int right);
 SIMPLEEXAMPLELIBRARY_API int fnCppAdderThree(int arg1, int arg2, int arg3);
 
+EXTERN_C SIMPLEEXAMPLELIBRARY_API int fnGetOne();
 EXTERN_C SIMPLEEXAMPLELIBRARY_API int fnAdder(int left, int right);
 EXTERN_C SIMPLEEXAMPLELIBRARY_API int fnAdderThree(int arg1, int arg2, int arg3);
 

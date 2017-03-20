@@ -18,6 +18,9 @@
 #include <stdlib.h>
 #include <tchar.h>
 
+#include <clocale>
 #include <filesystem>
+#include <iostream>
+#include <locale>
 #include <string>
 

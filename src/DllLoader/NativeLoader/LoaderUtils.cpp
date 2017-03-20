@@ -13,12 +13,15 @@ HMODULE LoaderUtils::Load(const std::string & filename)
     }
 
     DWORD flags = LOAD_LIBRARY_SEARCH_DEFAULT_DIRS;
-    auto module = LoadLibraryEx(FileUtilities::GetFullNameAsTChar(filename), NULL, flags);
+    auto fullname = FileUtilities::GetFullName(filename);
+    auto module = LoadLibraryEx(fullname.wstring().c_str(), nullptr, flags);
     if (nullptr == module)
     {
         auto error = GetLastError();
         throw LoadFailException(filename, error);
     }
+
+    return module;
 }
 
 void LoaderUtils::UnLoad(const HMODULE & hmodule)
